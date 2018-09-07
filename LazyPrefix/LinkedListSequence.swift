@@ -8,6 +8,8 @@
 
 import Foundation
 
+// https://www.skilled.io/u/playgroundscon/sequence-and-collection-swift
+
 indirect enum LinkedListNode<T> {
     case value(element: T, next: LinkedListNode<T>)
     case end
@@ -39,3 +41,19 @@ let middle = LinkedListNode.value(element: "Malhotra", next: end)
 let start = LinkedListNode.value(element: "Robin", next: middle)
 
 var iterator = LinkedListIterator(current: start)
+
+extension Sequence {
+    func count(_ shouldCount: (Iterator.Element) -> Bool) -> Int {
+        var count = 0
+        for element in self {
+            if shouldCount(element) { count += 1 }
+        }
+        return count
+    }
+}
+
+extension Sequence where Self.SubSequence: Sequence, Self.SubSequence.Iterator.Element == Self.Iterator.Element {
+    func eachPair() -> AnySequence<(Iterator.Element, Iterator.Element)> {
+        return AnySequence(zip(self, self.dropFirst()))
+    }
+}
