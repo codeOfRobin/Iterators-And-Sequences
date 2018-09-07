@@ -99,3 +99,6 @@ let x = (1..<6).lazy.scan(0, { (result, element) in
 })
 
 print(Array(x.prefix(3)))
+
+
+
