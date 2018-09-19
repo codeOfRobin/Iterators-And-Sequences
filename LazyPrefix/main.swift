@@ -15,49 +15,54 @@ struct Box<T: AnyObject> {
     }
 }
 
-class SomethingToObserve {
+class Observer<Event> {
+    let handler: (Event) -> Void
 
-}
-
-internal class Atomic<Value> {
-
-    private var _value: Value
-
-    internal init(_ value: Value) {
-        _value = value
+    init(handler: @escaping (Event) -> Void) {
+        self.handler = handler
     }
 
-    internal func apply(_ action: (inout Value) -> Void) {
-        action(&_value)
+    func notify(of event: Event) {
+        handler(event)
     }
 }
 
-public class Receiver<Event> {
-    private let values = Atomic<[Event]>([])
-    public typealias Handler = (Event) -> Void
-    private let handlers = Atomic<[Int:Handler]>([:])
+class Observable<Event> {
+    var observers: [Box<Observer<Event>>] = []
 
-    private func broadcast(elements: Int) {
-        values.apply { _values in
-
-            let lowerLimit = max(_values.count - elements, 0)
-            let indexs = (lowerLimit ..< _values.count)
-
-            for index in indexs {
-                let value = _values[index]
-                handlers.apply { _handlers in
-                    for _handler in _handlers.values {
-                        _handler(value)
-                    }
-                }
-            }
-        }
+    func subscribe(with observer: Observer<Event>) {
+        let box = Box(value: observer)
+        observers.append(box)
     }
 
-    fileprivate func append(value: Event) {
-        values.apply { currentValues in
-            currentValues.append(value)
-        }
-        broadcast(elements: 1)
+    func notify(with event: Event) {
+        observers = observers.filter{ $0.value != nil }
+        observers.forEach { $0.value?.notify(of: event) }
+        print("observers: \(observers.count)")
     }
 }
+
+var observer1: Observer<Int>? = Observer.init(handler: { print("\($0) x 2 = \($0 * 2)") })
+var observer2: Observer<Int>? = Observer.init(handler: { print("\($0) x 2 = \($0 * 2)") })
+var observer3: Observer<Int>? = Observer.init(handler: { print("\($0) x 3 = \($0 * 3)") })
+
+let observable = Observable<Int>()
+observable.subscribe(with: observer1!)
+observable.subscribe(with: observer2!)
+observable.subscribe(with: observer3!)
+
+observable.notify(with: 1)
+
+observer1 = nil
+
+observable.notify(with: 2)
+
+//
+//1 x 2 = 2
+//1 x 2 = 2
+//1 x 3 = 3
+//observers: 3
+//2 x 2 = 4
+//2 x 3 = 6
+//observers: 2
+//Program ended with exit code: 0
