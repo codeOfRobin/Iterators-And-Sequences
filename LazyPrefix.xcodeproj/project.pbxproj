@@ -10,6 +10,8 @@
 		42565CD1213EFA7200FABCCD /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42565CD0213EFA7200FABCCD /* main.swift */; };
 		42565CDA21427A1900FABCCD /* LinkedListSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42565CD921427A1900FABCCD /* LinkedListSequence.swift */; };
 		42565CDC2142874E00FABCCD /* WrappedCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42565CDB2142874E00FABCCD /* WrappedCollections.swift */; };
+		425981E22151340800605D0D /* ResultOr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425981E12151340800605D0D /* ResultOr.swift */; };
+		425981E42151342700605D0D /* PipesAndLazyPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425981E32151342700605D0D /* PipesAndLazyPrefix.swift */; };
 		42B98C7521454F4F00BA1946 /* LazyScanSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B98C7421454F4F00BA1946 /* LazyScanSequence.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +32,8 @@
 		42565CD0213EFA7200FABCCD /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		42565CD921427A1900FABCCD /* LinkedListSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedListSequence.swift; sourceTree = "<group>"; };
 		42565CDB2142874E00FABCCD /* WrappedCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedCollections.swift; sourceTree = "<group>"; };
+		425981E12151340800605D0D /* ResultOr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultOr.swift; sourceTree = "<group>"; };
+		425981E32151342700605D0D /* PipesAndLazyPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipesAndLazyPrefix.swift; sourceTree = "<group>"; };
 		42B98C7421454F4F00BA1946 /* LazyScanSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyScanSequence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +67,8 @@
 		42565CCF213EFA7200FABCCD /* LazyPrefix */ = {
 			isa = PBXGroup;
 			children = (
+				425981E12151340800605D0D /* ResultOr.swift */,
+				425981E32151342700605D0D /* PipesAndLazyPrefix.swift */,
 				42565CD0213EFA7200FABCCD /* main.swift */,
 				42B98C7421454F4F00BA1946 /* LazyScanSequence.swift */,
 				42565CD921427A1900FABCCD /* LinkedListSequence.swift */,
@@ -129,7 +135,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				42565CD1213EFA7200FABCCD /* main.swift in Sources */,
+				425981E42151342700605D0D /* PipesAndLazyPrefix.swift in Sources */,
 				42565CDC2142874E00FABCCD /* WrappedCollections.swift in Sources */,
+				425981E22151340800605D0D /* ResultOr.swift in Sources */,
 				42565CDA21427A1900FABCCD /* LinkedListSequence.swift in Sources */,
 				42B98C7521454F4F00BA1946 /* LazyScanSequence.swift in Sources */,
 			);

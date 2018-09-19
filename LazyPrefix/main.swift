@@ -8,65 +8,56 @@
 
 import Foundation
 
-infix operator |> : MultiplicationPrecedence
-func |> <T, U>(value: T, function: ((T) -> U)) -> U {
-    return function(value)
-}
-
-func printy(_ something: Any) {
-    print(something)
-}
-
-//: https://twitter.com/codeOfRobin/status/1039066012845584385
-/// Weird early break logic, hard to decipher and debug, state like `flag` and `sentinel` available outside logic where it's running
-var flag = false
-var sentinel: Int? = nil
-
-for i in (1...10) {
-    if i % 8 == 0 {
-        flag = true
-        sentinel = i
-        break
+struct Box<T: AnyObject> {
+    weak var value: T?
+    init(value: T) {
+        self.value = value
     }
 }
-if flag {
-    print("flag was true, stopped at \(String(describing: sentinel))")
+
+class SomethingToObserve {
+
 }
 
+internal class Atomic<Value> {
 
-/// Replace this with:
+    private var _value: Value
 
-let x = (1...10).lazy.prefix { (number) -> Bool in
-    return !(number % 8 == 0)
+    internal init(_ value: Value) {
+        _value = value
+    }
+
+    internal func apply(_ action: (inout Value) -> Void) {
+        action(&_value)
+    }
 }
-print(Array(x))
 
+public class Receiver<Event> {
+    private let values = Atomic<[Event]>([])
+    public typealias Handler = (Event) -> Void
+    private let handlers = Atomic<[Int:Handler]>([:])
 
-enum Result<Value> {
-    case success(Value)
-    case failure(Error)
+    private func broadcast(elements: Int) {
+        values.apply { _values in
 
-    init(_ value: Value?, or error: Error) {
-        if let v = value {
-            self = .success(v)
-        } else {
-            self = .failure(error)
+            let lowerLimit = max(_values.count - elements, 0)
+            let indexs = (lowerLimit ..< _values.count)
+
+            for index in indexs {
+                let value = _values[index]
+                handlers.apply { _handlers in
+                    for _handler in _handlers.values {
+                        _handler(value)
+                    }
+                }
+            }
         }
     }
+
+    fileprivate func append(value: Event) {
+        values.apply { currentValues in
+            currentValues.append(value)
+        }
+        broadcast(elements: 1)
+    }
 }
-
-enum SomeError: Error { case something }
-
-var int1: Int? = 2
-var int2: Int? = nil
-
-let result1 = Result(int1, or: SomeError.something)
-// .success(2)
-
-let result2 = Result(int2, or: SomeError.something)
-// .failure(SomeError.something)
-
-
-print(result1)
-print(result2)
-
